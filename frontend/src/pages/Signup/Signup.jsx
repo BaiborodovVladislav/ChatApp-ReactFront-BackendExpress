@@ -1,109 +1,117 @@
-import GenderCheckbox from "./GenderCheckbox"
-import { Link } from "react-router-dom"
-import { useState } from "react"
+// Импортируем нужные функции и компоненты
+import { useState } from "react"; // Используем useState, чтобы хранить данные
+import { Link } from "react-router-dom"; // Используем Link, чтобы создать ссылку для перехода на другую страницу
+import useSignup from "../../hooks/useSignup"; // Используем пользовательский хук для регистрации
+import GenderCheckbox from "./GenderCheckbox"; // Импортируем компонент для выбора пола
 
-function Signup() {
+// Создаем компонент Signup
+const Signup = () => {
+	// Определяем состояния для каждого поля формы
+	const [fullName, setFullName] = useState(""); // Полное имя
+	const [userName, setUserName] = useState(""); // Имя пользователя
+	const [email, setEmail] = useState(""); // Электронная почта
+	const [password, setPassword] = useState(""); // Пароль
+	const [confirmPassword, setConfirmPassword] = useState(""); // Подтверждение пароля
+	const [gender, setGender] = useState(""); // Пол
 
-	const [input, setInput] = useState({
+	const { signup, loading } = useSignup(); // Получаем функцию signup и статус загрузки
 
-		fullName: '',
-		username: '',
-		email: '',
-		password: '',
-		confirmPassword: '',
-		gender: '',
-	})
+	// Функция для отправки формы
+	const handleSubmit = async (e) => {
+		e.preventDefault(); // Предотвращаем перезагрузку страницы
+		await signup({ fullName, userName, email, password, confirmPassword, gender }); // Отправляем данные для регистрации
+	};
 
+	// Функция для изменения пола
+	const handleGenderChange = (selectedGender) => {
+		setGender(selectedGender); // Устанавливаем выбранный пол
+	};
 
-	const handleCheckboxSubmit = (gender) => {
-
-		setInput({ ...input, gender: gender })
-
-
-	}
-	const handleSubmit = (e) => {
-		e.preventDefault()
-		console.log(input)
-	}
-
-
+	// Возвращаем разметку для отображения формы регистрации
 	return (
-		<div className="flex flex-col items-center justify-center min-w-96 mx-auto">
-			<div className=" w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0  border-gray-100">
-				<h1 className="  text-3xl font-semibold text-center text-gray-300 w">
-					Sign Up <span className="text-blue-500"> ChatApp</span>
+		<div className='flex flex-col items-center justify-center min-w-96 mx-auto py-8'>
+			<div className='w-96 p-6 bg-white-300 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 border border-gray-100'>
+				<h1 className='text-3xl font-semibold text-center text-gray-300'>
+					Signup
+					<span className="text-blue-500"> ChatApp</span> {/* Заголовок */}
 				</h1>
 
-				<form onSubmit={handleSubmit}>
-					<div className="mt-4">
-						<label className="label p-2 ">
-							<span className="text-base label-text text-gray-200">Full Name</span>
+				<form onSubmit={handleSubmit} className="space-y-4"> {/* Форма */}
+					<div>
+						<label className="label">
+							<span className="text-base label-text text-gray-200">Full Name</span> {/* Метка для полного имени */}
 						</label>
-						<input type="text" placeholder="Jhon Doe" className="bg-green-200 w-full input input-bordered h-10 m-2"
-
-							value={input.fullName}
-							onChange={(e) => setInput({ ...input, fullName: e.target.value })}
-
+						<input
+							type="text"
+							placeholder="Enter full name"
+							className="bg-green-200 w-full input input-bordered"
+							value={fullName}
+							onChange={(e) => setFullName(e.target.value)} // Изменение значения полного имени
 						/>
 					</div>
 					<div>
-						<label className="label p-2 ">
-							<span className="text-base label-text text-gray-200">Username</span>
+						<label className="label">
+							<span className="text-base label-text text-gray-200">Username</span> {/* Метка для имени пользователя */}
 						</label>
-						<input type="text" placeholder="Jhondoe" className="bg-green-200 w-full input input-bordered h-10 m-2"
-
-							value={input.username}
-							onChange={(e) => setInput({ ...input, username: e.target.value })}
-
+						<input
+							type="text"
+							placeholder="Enter username"
+							className="bg-green-200 w-full input input-bordered"
+							value={userName}
+							onChange={(e) => setUserName(e.target.value)} // Изменение значения имени пользователя
 						/>
 					</div>
 					<div>
-						<label className="label p-2 ">
-							<span className="text-base label-text text-gray-200">Email</span>
+						<label className="label">
+							<span className="text-base label-text text-gray-200">Email</span> {/* Метка для электронной почты */}
 						</label>
-						<input type="email" placeholder="Jhondoe@exapmle.com" className="bg-green-200 w-full input input-bordered h-10 m-2"
-
-							value={input.email}
-							onChange={(e) => setInput({ ...input, email: e.target.value })}
-
+						<input
+							type="email"
+							placeholder="Enter email"
+							className="bg-green-200 w-full input input-bordered"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)} // Изменение значения электронной почты
 						/>
 					</div>
 					<div>
-						<label className="label p-2 ">
-							<span className="text-base label-text text-gray-200">Password</span>
+						<label className="label">
+							<span className="text-base label-text text-gray-200">Password</span> {/* Метка для пароля */}
 						</label>
-						<input type="password" placeholder="Enter password" className="bg-green-200 w-full input input-bordered h-10 m-2"
-
-							value={input.password}
-							onChange={(e) => setInput({ ...input, password: e.target.value })}
-
+						<input
+							type="password"
+							placeholder="Enter password"
+							className="bg-green-200 w-full input input-bordered"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)} // Изменение значения пароля
 						/>
 					</div>
 					<div>
-						<label className="label p-2 ">
-							<span className="text-base label-text text-gray-200">Confirm Password</span>
+						<label className="label">
+							<span className="text-base label-text text-gray-200">Confirm Password</span> {/* Метка для подтверждения пароля */}
 						</label>
-						<input type="password" placeholder="Confirm password" className="bg-green-200 w-full input input-bordered h-10 m-2"
-
-							value={input.confirmPassword}
-							onChange={(e) => setInput({ ...input, confirmPassword: e.target.value })}
-
+						<input
+							type="password"
+							placeholder="Confirm password"
+							className="bg-green-200 w-full input input-bordered"
+							value={confirmPassword}
+							onChange={(e) => setConfirmPassword(e.target.value)} // Изменение значения подтверждения пароля
 						/>
 					</div>
-
-					<GenderCheckbox handleCheckboxSubmit={handleCheckboxSubmit} selected={input.gender} />
-
-					<Link to={"/login"} className="text-sm text-gray-300 hover:text-blue-600 hover:underline mt-2 inline-block">
+					<div>
+						<label className="label">
+							<span className="text-base label-text text-gray-200"></span>
+						</label>
+						<GenderCheckbox handleCheckboxSubmit={handleGenderChange} selected={gender} /> {/* Компонент для выбора пола */}
+					</div>
+					<Link to="/login" className="text-sm text-gray-300 hover:text-blue-600 hover:underline mt-2 inline-block">
 						Already have an account?
-					</Link>
-					<div>
-						<button className="btn btn-primary w-full mt-4">Sign Up</button>
-					</div>
+					</Link> {/* Ссылка на страницу входа */}
 
+					<button className="btn btn-primary w-full mt-4" disabled={loading}>Signup</button> {/* Кнопка регистрации */}
 				</form>
 			</div>
 		</div>
-	)
-}
+	);
+};
 
-export default Signup
+export default Signup; // Экспортируем компонент Signup

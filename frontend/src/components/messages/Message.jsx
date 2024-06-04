@@ -1,20 +1,42 @@
+import PropTypes from 'prop-types';
+import useConversation from '../../zustand/useConversation';
+import { useAuthContext } from '../../context/AuthContext';
+import { extraktTimes } from '../../utils/extraktTimes';
 
+function Message({ message }) {
+	const { auth } = useAuthContext();
+	const { selectedConversation } = useConversation();
 
-function Message() {
+	// Debug logs
+	// console.log('Message data:', message);
+	// console.log('authUser:', auth);
+	// console.log('selectedConversation:', selectedConversation);
+
+	const fromMe = message.senderId === auth._id;
+	const chatClassName = fromMe ? "chat-end" : "chat-start";
+	const formatDate = extraktTimes(message.createdAt);
+	const profilePick = fromMe ? auth.profile : selectedConversation?.profile;
+	const bubbleBgColor = fromMe ? "bg-blue-500" : "";
+
 	return (
-		<div className="chat chat-end">
+		<div className={`chat ${chatClassName}`}>
 			<div className="chat-image avatar">
 				<div className="w-10 rounded-full">
-					<img alt="Tailwind component"
-						src={"https://cdn0.iconfinder.com/data/icons/communication-line-10/24/account_profile_user_contact_person_avatar_placeholder-512.png"}
-					/>
+					<img alt="Tailwind component" src={profilePick} />
 				</div>
 			</div>
-			<div className={"chat-bubble text-white bg-blue-500"}>Hi! What is upp?</div>
-			<div className="chat-footer text-xs opacity-50 flex gap-1 items-center">10:45</div>
+			<div className={`chat-bubble text-white ${bubbleBgColor}`}>{message.message}</div>
+			{formatDate && <div className="chat-footer mt-1 text-gray-50  text-xs opacity-50 flex gap-3 items-center">{formatDate}</div>}
 		</div>
-
-	)
+	);
 }
 
-export default Message
+Message.propTypes = {
+	message: PropTypes.shape({
+		message: PropTypes.string.isRequired,
+		senderId: PropTypes.string.isRequired,
+		createdAt: PropTypes.string.isRequired
+	}).isRequired
+};
+
+export default Message;

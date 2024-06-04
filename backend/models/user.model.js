@@ -1,36 +1,36 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"; // Импортируем библиотеку mongoose, которая помогает работать с базой данных MongoDB
 
-const userSchema = new mongoose.Schema({
-	fullName: {
-		type: String,
-		required: true,
+const userSchema = new mongoose.Schema({ // Создаем схему (описание) для данных пользователя
+	fullName: { // Полное имя пользователя
+		type: String, // Тип данных - строка (текст)
+		required: true, // Обязательно для заполнения
 	},
-	userName: {
-		type: String,
-		required: true,
-		unique: true
+	userName: { // Имя пользователя (логин)
+		type: String, // Тип данных - строка
+		required: true, // Обязательно для заполнения
+		unique: true // Должно быть уникальным (неповторяющимся)
 	},
-	password: {
-		type: String,
-		required: true,
-		minlength: 6
+	password: { // Пароль пользователя
+		type: String, // Тип данных - строка
+		required: true, // Обязательно для заполнения
+		minlength: 6 // Минимальная длина - 6 символов
 	},
-	email: {
-		type: String,
-		required: true,
-		unique: true
+	email: { // Электронная почта пользователя
+		type: String, // Тип данных - строка
+		required: true, // Обязательно для заполнения
+		unique: true // Должна быть уникальной
 	},
-	gender: {
-		type: String,
-		required: true,
-		enum: ["male", "female"]
+	gender: { // Пол пользователя
+		type: String, // Тип данных - строка
+		required: true, // Обязательно для заполнения
+		enum: ["male", "female"] // Может быть только "male" (мужской) или "female" (женский)
 	},
-	profile: {
-		type: String,
-		default: "",
+	profile: { // Профиль пользователя (например, URL картинки профиля)
+		type: String, // Тип данных - строка
+		default: "", // Значение по умолчанию - пустая строка
 	},
-}, { timestamps: true });
+}, { timestamps: true }); // Автоматически добавляет время создания и обновления данных
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema); // Создаем модель (объект) "User" на основе нашей схемы
 
-export default User;
+export default User; // Экспортируем модель, чтобы ее можно было использовать в других файлах
